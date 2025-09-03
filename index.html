@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow Chatbot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .chat-bubble {
+            @apply max-w-[85%] p-4 rounded-xl shadow-lg;
+        }
+        .bot-message {
+            @apply bg-gray-800 text-gray-200 self-start rounded-tl-none;
+        }
+        .user-message {
+            @apply bg-indigo-600 text-white self-end rounded-br-none;
+        }
+        .fade-in-up {
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-lg h-[80vh] flex flex-col glass-effect rounded-2xl shadow-xl overflow-hidden">
+        
+        <!-- Header -->
+        <header class="flex items-center space-x-4 p-4 border-b border-gray-700/50">
+            <div class="p-2 bg-indigo-500/20 text-indigo-400 rounded-lg">
+                <i data-lucide="bot"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-lg text-white">TaskFlow Bot</h1>
+                <p class="text-gray-400 text-sm">Online</p>
+            </div>
+        </header>
+
+        <!-- Chat Area -->
+        <main id="chat-window" class="flex-1 p-4 overflow-y-auto space-y-4 flex flex-col scroll-smooth">
+            <!-- Initial Message -->
+            <div class="chat-bubble bot-message fade-in-up">
+                <p>Olá! Bem-vindo(a) ao TaskFlow. Quer saber como você pode fazer uma **renda extra** de maneira simples e rápida?</p>
+            </div>
+        </main>
+        
+        <!-- Footer with Continue Button -->
+        <footer id="chat-footer" class="p-4 border-t border-gray-700/50 flex justify-center">
+            <button id="continue-btn" class="py-3 px-6 rounded-lg font-semibold bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-500/50 transition-transform hover:scale-105">
+                Continuar
+            </button>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+
+            const chatWindow = document.getElementById('chat-window');
+            const chatFooter = document.getElementById('chat-footer');
+            
+            let currentStage = 0;
+
+            const conversationStages = [
+                // Stage 0: Company intro
+                ["Nós somos uma empresa de renda extra onde recebemos tarefas de outras empresas e as dividimos para os usuários.", "Nossa plataforma já conta com mais de 50 mil usuários ativos apenas no Brasil e é totalmente confiável."],
+
+                // Stage 1: Task details and earnings
+                ["Nossas tarefas são simples, como curtir, reagir, avaliar ou comentar inicialmente. Com o tempo, elas ficam um pouco mais complexas. Cada nível tem seu tipo de tarefa e a cada nível você ganha mais por tarefa.", "Inicialmente os valores são baixos, mas com o tempo você poderá receber até 100 reais por dia.", "Isso depende do trabalho dos usuários e das empresas que nos enviam as tarefas. Quanto mais usuários, mais tarefas conseguimos receber e mais os valores pagos aumentam!"],
+
+                // Stage 2: Security and paid tasks
+                ["E não precisa se preocupar, pois toda tarefa é remunerada e você poderá realizar o saque a qualquer instante.", "Com o tempo, o nível vai aumentando e as tarefas selecionadas podem ser de empresas maiores que podem exigir coisas como testar aplicativos ou serviços, mas não se preocupe, toda tarefa é remunerada."],
+
+                // Stage 3: Daily tasks and limits
+                ["Todos os dias você tem tarefas novas. Como temos que dividir as tarefas entre os usuários, temos um limite mínimo de saque e um limite de tarefas por dia.", "Por isso, às vezes damos algumas opções de pular alguns níveis."],
+
+                // Stage 4: Manual withdrawal process
+                ["O seu saque é sempre garantido. Você sempre vai conseguir sacar a hora que quiser quando atingir o valor mínimo.", "Porém, para a segurança dos usuários, desativamos o saque e o depósito automático. Então, os saques são feitos por um atendente real, de uma conta para a sua, e você recebe o dinheiro em minutos, sem precisar esperar. Deseja prosseguir para saber como começar?"],
+                
+                // Stage 5: How to start
+                ["Bom, para começar basta instalar o aplicativo Zangi na Play Store ou na App Store (caso esteja utilizando um iPhone). É um aplicativo de conversa semelhante ao WhatsApp, mas não precisa de número nem cadastro, por isso usamos ele para ficar mais adaptável e seguro.", "Após instalar, adicione este número aos contatos: 10-6479-5500. O formato do número é esse mesmo. Logo após adicionar, basta enviar um 'oi' que você será atendido pelo atendente.", "Mas lembre-se, ele é apenas um atendente que analisa e confirma as tarefas concluídas dos usuários e realiza o saque de forma manual. Caso tenha algum problema com a plataforma, você poderá perguntar no grupo ao qual será adicionado com vários outros membros e usuários da plataforma ou perguntar direto para o atendente, que terá que entrar em contato com o suporte para ajudar com seu problema.", "Um bem comum que temos é a falta de tarefas; isso é apenas um erro comum, estar faltando tarefas na plataforma..."],
+
+                // Stage 6: Final message
+                ["Agora que você já entendeu tudo, essa conversa será encerrada. Boa sorte e bons ganhos!"]
+            ];
+
+            function createMessageElement(text, isBot = true) {
+                const messageContainer = document.createElement('div');
+                messageContainer.className = `chat-bubble fade-in-up ${isBot ? 'bot-message' : 'user-message'}`;
+                messageContainer.innerHTML = `<p>${text}</p>`;
+                return messageContainer;
+            }
+
+            function createContinueButton() {
+                const newButton = document.createElement('button');
+                newButton.id = "continue-btn";
+                newButton.className = "py-3 px-6 rounded-lg font-semibold bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-500/50 transition-transform hover:scale-105";
+                newButton.textContent = "Continuar";
+                newButton.addEventListener('click', handleContinue);
+                chatFooter.innerHTML = '';
+                chatFooter.appendChild(newButton);
+            }
+
+            function createEndElements() {
+                chatFooter.innerHTML = `
+                    <input type="text" placeholder="Digite sua mensagem..." class="flex-1 bg-gray-800 text-gray-200 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-indigo-500" disabled>
+                    <button class="p-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors" disabled>
+                        <i data-lucide="send"></i>
+                    </button>
+                `;
+                lucide.createIcons();
+            }
+
+            function handleContinue() {
+                // Remove the button
+                chatFooter.innerHTML = '';
+                
+                let delay = 500; // Delay before bot messages start
+
+                // Display bot messages for the current stage
+                if (currentStage < conversationStages.length) {
+                    const messages = conversationStages[currentStage];
+                    messages.forEach((message) => {
+                        setTimeout(() => {
+                            const messageElement = createMessageElement(message);
+                            chatWindow.appendChild(messageElement);
+                            chatWindow.scrollTop = chatWindow.scrollHeight;
+                            lucide.createIcons();
+                        }, delay);
+                        delay += 1500; // 1.5s delay between each bot message
+                    });
+
+                    currentStage++;
+
+                    if (currentStage < conversationStages.length) {
+                        setTimeout(() => {
+                            createContinueButton();
+                            chatWindow.scrollTop = chatWindow.scrollHeight;
+                        }, delay);
+                    } else {
+                        setTimeout(() => {
+                            createEndElements();
+                            chatWindow.scrollTop = chatWindow.scrollHeight;
+                        }, delay);
+                    }
+                }
+            }
+
+            // Initial button listener
+            document.getElementById('continue-btn').addEventListener('click', handleContinue);
+        });
+    </script>
+</body>
+</html>
