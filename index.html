@@ -61,7 +61,7 @@
         <main id="chat-window" class="flex-1 p-4 overflow-y-auto space-y-4 flex flex-col scroll-smooth">
             <!-- Initial Message -->
             <div class="chat-bubble bot-message fade-in-up">
-                <p>Olá! Bem-vindo(a) ao TaskFlow. Quer saber como você pode fazer uma **renda extra** de maneira simples e rápida?</p>
+                <p>Olá! Bem-vindo(a) ao TaskFlow! Quer saber como ganhar uma renda extra de forma simples e rápida? 💸</p>
             </div>
         </main>
         
@@ -85,25 +85,25 @@
 
             const conversationStages = [
                 // Stage 0: Company intro
-                ["Nós somos uma empresa de renda extra onde recebemos tarefas de outras empresas e as dividimos para os usuários.", "Nossa plataforma já conta com mais de 50 mil usuários ativos apenas no Brasil e é totalmente confiável."],
+                ["Nós somos uma plataforma confiável que recebe tarefas de empresas e as distribui para os usuários. Atualmente, contamos com mais de 50 mil usuários ativos apenas no Brasil. Deseja prosseguir?"],
 
                 // Stage 1: Task details and earnings
-                ["Nossas tarefas são simples, como curtir, reagir, avaliar ou comentar inicialmente. Com o tempo, elas ficam um pouco mais complexas. Cada nível tem seu tipo de tarefa e a cada nível você ganha mais por tarefa.", "Inicialmente os valores são baixos, mas com o tempo você poderá receber até 100 reais por dia.", "Isso depende do trabalho dos usuários e das empresas que nos enviam as tarefas. Quanto mais usuários, mais tarefas conseguimos receber e mais os valores pagos aumentam!"],
+                ["As tarefas iniciais são simples: curtir, reagir, avaliar ou comentar. Com o tempo, elas podem se tornar um pouco mais complexas, e cada nível tem seu tipo de tarefa. Quanto maior o seu nível, maior o valor recebido por tarefa 💰, podendo chegar a ganhos de até R$ 100 por dia. Isso depende da quantidade de usuários e das empresas que enviam as tarefas – quanto mais usuários, mais tarefas conseguimos distribuir e maiores os valores pagos."],
 
                 // Stage 2: Security and paid tasks
-                ["E não precisa se preocupar, pois toda tarefa é remunerada e você poderá realizar o saque a qualquer instante.", "Com o tempo, o nível vai aumentando e as tarefas selecionadas podem ser de empresas maiores que podem exigir coisas como testar aplicativos ou serviços, mas não se preocupe, toda tarefa é remunerada."],
+                ["Todas as tarefas são remuneradas, e você pode solicitar o saque a qualquer momento, desde que alcance o valor mínimo do seu nível. Para segurança dos usuários 🔒, os saques são processados manualmente por um atendente real, de nossa conta para a sua, garantindo que você receba o dinheiro em minutos ⏱️. Deseja prosseguir?"],
 
                 // Stage 3: Daily tasks and limits
-                ["Todos os dias você tem tarefas novas. Como temos que dividir as tarefas entre os usuários, temos um limite mínimo de saque e um limite de tarefas por dia.", "Por isso, às vezes damos algumas opções de pular alguns níveis."],
+                ["Com o tempo, seu nível aumenta e você terá acesso a tarefas de empresas maiores, que podem exigir testes de aplicativos ou serviços 📱, mas todas são remuneradas. Todos os dias há novas tarefas ✨, e existem limites de tarefas por dia e valores mínimos de saque para organizar a distribuição entre os usuários. Às vezes, oferecemos opções de pular níveis ⏭️ para agilizar o acesso a tarefas mais lucrativas."],
 
                 // Stage 4: Manual withdrawal process
-                ["O seu saque é sempre garantido. Você sempre vai conseguir sacar a hora que quiser quando atingir o valor mínimo.", "Porém, para a segurança dos usuários, desativamos o saque e o depósito automático. Então, os saques são feitos por um atendente real, de uma conta para a sua, e você recebe o dinheiro em minutos, sem precisar esperar. Deseja prosseguir para saber como começar?"],
+                ["Para começar, instale o aplicativo Zangi na Play Store ou App Store (iPhone). É um app de conversa semelhante ao WhatsApp, mas que não precisa de número nem cadastro, garantindo maior segurança 🔐 e adaptabilidade. Após instalar, adicione este número aos contatos: 10-6479-5500 e envie um “oi” 👋. Você será atendido pelo nosso atendente, que confirma as tarefas concluídas e realiza os saques de forma manual."],
                 
                 // Stage 5: How to start
-                ["Bom, para começar basta instalar o aplicativo Zangi na Play Store ou na App Store (caso esteja utilizando um iPhone). É um aplicativo de conversa semelhante ao WhatsApp, mas não precisa de número nem cadastro, por isso usamos ele para ficar mais adaptável e seguro.", "Após instalar, adicione este número aos contatos: 10-6479-5500. O formato do número é esse mesmo. Logo após adicionar, basta enviar um 'oi' que você será atendido pelo atendente.", "Mas lembre-se, ele é apenas um atendente que analisa e confirma as tarefas concluídas dos usuários e realiza o saque de forma manual. Caso tenha algum problema com a plataforma, você poderá perguntar no grupo ao qual será adicionado com vários outros membros e usuários da plataforma ou perguntar direto para o atendente, que terá que entrar em contato com o suporte para ajudar com seu problema.", "Um bem comum que temos é a falta de tarefas; isso é apenas um erro comum, estar faltando tarefas na plataforma..."],
+                ["Caso tenha algum problema, você poderá perguntar no grupo de usuários 👥 ou diretamente ao atendente, que entrará em contato com o suporte para resolver sua dúvida. Um ponto importante: ocasionalmente, pode parecer que faltam tarefas na plataforma. Isso é normal 📉 e acontece quando a demanda de tarefas está baixa."],
 
                 // Stage 6: Final message
-                ["Agora que você já entendeu tudo, essa conversa será encerrada. Boa sorte e bons ganhos!"]
+                ["Agora que você já entendeu tudo ✅, esta conversa será encerrada. Boa sorte e bons ganhos! 🍀"]
             ];
 
             function createMessageElement(text, isBot = true) {
