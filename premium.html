@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow Premium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #1a1a1a;
+            color: #f8f8f8;
+        }
+        
+        .gold-gradient {
+            background: linear-gradient(135deg, #f9d423 0%, #e2b13c 50%, #d4a017 100%);
+        }
+        
+        .gold-text {
+            background: linear-gradient(135deg, #f9d423 0%, #e2b13c 50%, #d4a017 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .task-card {
+            transition: all 0.3s ease;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        
+        .task-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
+            border-color: rgba(212, 175, 55, 0.4);
+        }
+        
+        .glass-effect {
+            background: rgba(30, 30, 30, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+        
+        .gold-border {
+            border: 2px solid rgba(212, 175, 55, 0.5);
+        }
+        
+        .gold-shadow {
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <header class="flex justify-between items-center mb-10">
+            <div class="flex items-center">
+                <div class="w-12 h-12 rounded-full gold-gradient flex items-center justify-center mr-4">
+                    <i data-feather="check-circle" class="text-white w-6 h-6"></i>
+                </div>
+                <h1 class="text-3xl font-bold gold-text">TaskFlow Premium</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <button id="notification-btn" class="p-2 rounded-full hover:bg-gray-800">
+                        <i data-feather="bell" class="text-gray-400"></i>
+                    </button>
+                    <!-- Painel de Notificações -->
+                    <div id="notification-panel" class="hidden absolute top-12 right-0 w-80 bg-gray-800/90 backdrop-blur-md rounded-lg shadow-lg gold-border z-50">
+                        <div class="p-4 border-b border-gray-700 flex justify-between items-center">
+                            <h3 class="font-bold gold-text">Notificações</h3>
+                            <button id="close-notification-panel" class="text-gray-400 hover:text-white">&times;</button>
+                        </div>
+                        <div class="p-4 text-center text-gray-400">
+                            <p>Nenhuma notificação nova.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2 bg-gray-800/50 px-4 py-2 rounded-full">
+                    <div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center">
+                        <i data-feather="user" class="text-gray-400"></i>
+                    </div>
+                    <span class="font-medium">Usuário</span>
+                </div>
+            </div>
+        </header>
+        
+        <div class="glass-effect gold-border rounded-2xl p-6 mb-8 gold-shadow">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-gray-400 mb-1">Saldo Disponível</p>
+                    <p id="user-balance" class="text-3xl font-bold gold-text">R$ 0,00</p>
+                </div>
+
+                <div class="text-right">
+                     <p class="text-gray-400 mb-2">Seu Nível</p>
+                     <div class="flex items-center justify-end">
+                         <i data-feather="star" class="text-yellow-400 mr-2"></i>
+                         <span id="user-level-display" class="text-2xl font-bold gold-text">1</span>
+                     </div>
+                </div>
+            </div>
+            <div class="mt-6 flex space-x-4">
+                <button id="deposit-btn" class="flex-1 gold-gradient text-white px-6 py-3 rounded-full font-medium hover:opacity-90 transition">
+                    Depositar
+                </button>
+                <button id="withdraw-btn" class="flex-1 bg-gray-700 text-white px-6 py-3 rounded-full font-medium hover:bg-gray-600 transition">
+                    Sacar
+                </button>
+            </div>
+            <p id="min-withdrawal-text" class="text-center text-gray-500 text-xs mt-3"></p>
+        </div>
+        
+        <section>
+            <h2 class="text-2xl font-bold mb-6 flex items-center">
+                <i data-feather="list" class="mr-2 gold-text"></i>
+                <span class="gold-text">Tarefa Disponível</span>
+            </h2>
+            
+            <div id="task-container" class="flex justify-center">
+                
+                <!-- TAREFA NÍVEL 1 -->
+                <div class="task-card glass-effect rounded-xl p-6 w-full max-w-md" 
+                     data-level="1" 
+                     data-locked="false" 
+                     data-min-value="10.00"
+                     data-task-title="Realize a Tarefa de Boas-vindas"
+                     data-task-description="Esta é a sua primeira tarefa. Para completá-la, siga as instruções cuidadosamente. O objetivo é familiarizá-lo com nossa plataforma. Clique no link fornecido, explore a página por alguns minutos e depois retorne para confirmar a conclusão.">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center mr-3">
+                            <i data-feather="clipboard" class="text-yellow-400"></i>
+                        </div>
+                        <h3 class="font-bold text-lg">Tarefa de Boas-vindas</h3>
+                    </div>
+                     <p class="text-gray-400 text-sm mb-4">Requer R$ 10,00 de saldo para iniciar.</p>
+                    <div class="flex justify-between items-center mt-4">
+                        <span class="text-yellow-400 font-medium">R$ 0,50</span>
+                        <button class="start-task-btn bg-yellow-500/20 text-yellow-400 px-4 py-2 rounded-lg text-sm font-medium hover:bg-yellow-500/30 transition">
+                            Iniciar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TAREFA NÍVEL 2 -->
+                <div class="task-card glass-effect rounded-xl p-6 w-full max-w-md" 
+                     data-level="2" 
+                     data-locked="false" 
+                     data-min-value="25.00"
+                     data-task-title="Execute a Tarefa VIP"
+                     data-task-description="Parabéns por alcançar o nível VIP! Esta tarefa especial oferece uma recompensa maior. Sua missão é avaliar um produto ou serviço exclusivo. Forneça um feedback honesto e detalhado para nos ajudar a melhorar.">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center mr-3">
+                            <i data-feather="award" class="text-yellow-400"></i>
+                        </div>
+                        <h3 class="font-bold text-lg">Tarefa VIP</h3>
+                    </div>
+                     <p class="text-gray-400 text-sm mb-4">Requer R$ 25,00 de saldo para iniciar.</p>
+                    <div class="flex justify-between items-center mt-4">
+                        <span class="text-yellow-400 font-medium">R$ 5,00</span>
+                        <button class="start-task-btn bg-yellow-500/20 text-yellow-400 px-4 py-2 rounded-lg text-sm font-medium hover:bg-yellow-500/30 transition">
+                            Iniciar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TAREFA NÍVEL 3 (BLOQUEADA) -->
+                <div class="task-card glass-effect rounded-xl p-6 w-full max-w-md" 
+                     data-level="3" 
+                     data-locked="true"
+                     data-task-title="Tarefa Premium Bloqueada"
+                     data-task-description="Esta tarefa ainda não está disponível para você. Continue ativo na plataforma para desbloqueá-la em breve.">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center mr-3">
+                            <i data-feather="shield" class="text-yellow-400"></i>
+                        </div>
+                        <h3 class="font-bold text-lg">Tarefa Premium</h3>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">Esta tarefa está bloqueada no momento.</p>
+                    <div class="flex justify-between items-center mt-4">
+                        <span class="text-yellow-400 font-medium">R$ 10,00</span>
+                        <button class="start-task-btn bg-gray-600 text-gray-400 px-4 py-2 rounded-lg text-sm font-medium cursor-not-allowed">
+                            Bloqueada
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        
+        <footer class="mt-16 pt-8 border-t border-gray-800/50">
+            <div class="flex flex-col md:flex-row justify-center items-center">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <div class="w-8 h-8 rounded-full gold-gradient flex items-center justify-center mr-2">
+                        <i data-feather="check-circle" class="text-white w-4 h-4"></i>
+                    </div>
+                    <span class="font-medium">TaskFlow Premium</span>
+                </div>
+            </div>
+            <p class="text-center text-gray-500 text-sm mt-8">© 2024 TaskFlow Premium. Todos os direitos reservados.</p>
+        </footer>
+    </div>
+
+    <!-- MODAIS -->
+    <div id="modal-backdrop" class="fixed inset-0 bg-black bg-opacity-70 hidden z-40"></div>
+
+    <!-- Modal de Saque/Depósito -->
+    <div id="support-modal" class="hidden fixed inset-0 flex items-center justify-center z-50 p-4">
+        <div class="bg-gray-800 rounded-lg p-8 max-w-sm w-full text-center glass-effect gold-border">
+            <h3 class="text-xl font-bold mb-4 gold-text">Aviso Importante</h3>
+            <p class="text-gray-300 mb-6">As transações de depósito e saque estão disponíveis apenas de forma manual. Para prosseguir, por favor, chame o suporte.</p>
+            <button class="close-modal-btn w-full gold-gradient text-white px-6 py-2 rounded-full font-medium hover:opacity-90 transition">Entendi</button>
+        </div>
+    </div>
+
+    <!-- Modal de Requisito de Tarefa -->
+    <div id="requirement-modal" class="hidden fixed inset-0 flex items-center justify-center z-50 p-4">
+        <div class="bg-gray-800 rounded-lg p-8 max-w-sm w-full text-center glass-effect gold-border">
+            <h3 class="text-xl font-bold mb-4 gold-text">Requisito de Tarefa</h3>
+            <p id="requirement-message" class="text-gray-300 mb-6"></p>
+            <button class="close-modal-btn w-full gold-gradient text-white px-6 py-2 rounded-full font-medium hover:opacity-90 transition">OK</button>
+        </div>
+    </div>
+
+    <!-- Modal de Explicação da Tarefa -->
+    <div id="task-explanation-modal" class="hidden fixed inset-0 flex items-center justify-center z-50 p-4">
+        <div class="bg-gray-800 rounded-lg p-8 max-w-lg w-full text-left glass-effect gold-border">
+            <h3 id="task-modal-title" class="text-2xl font-bold mb-4 gold-text"></h3>
+            <p id="task-modal-description" class="text-gray-300 mb-8"></p>
+            <div class="flex justify-end space-x-4">
+                <button class="close-modal-btn bg-gray-700 text-white px-6 py-2 rounded-full font-medium hover:bg-gray-600 transition">Fechar</button>
+                <a href="#" target="_blank" id="task-modal-link" class="gold-gradient text-white px-6 py-2 rounded-full font-medium hover:opacity-90 transition">Realizar Tarefa</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // --- CONFIGURAÇÕES GERAIS ---
+        // Altere aqui para definir o nível, saldo e valor mínimo de saque
+        const config = {
+            userLevel: 2,
+            userBalance: 25.00,
+            minWithdrawalAmount: 50.00
+        };
+
+        // --- INICIALIZAÇÃO ---
+        document.addEventListener('DOMContentLoaded', () => {
+            feather.replace();
+            initializeApp();
+        });
+
+        function initializeApp() {
+            // Atualiza os elementos da UI com os dados do usuário
+            document.getElementById('user-level-display').textContent = config.userLevel;
+            document.getElementById('user-balance').textContent = `R$ ${config.userBalance.toFixed(2).replace('.', ',')}`;
+            document.getElementById('min-withdrawal-text').textContent = `Saque mínimo de R$ ${config.minWithdrawalAmount.toFixed(2).replace('.', ',')}`;
+            
+            updateVisibleTask();
+            setupEventListeners();
+        }
+
+        // --- MANIPULAÇÃO DE TAREFAS ---
+        function updateVisibleTask() {
+            const taskContainer = document.getElementById('task-container');
+            const allTasks = document.querySelectorAll('.task-card');
+            
+            let taskToShow = null;
+            allTasks.forEach(task => {
+                task.style.display = 'none'; 
+                if (parseInt(task.dataset.level) === config.userLevel) {
+                    taskToShow = task;
+                }
+            });
+
+            taskContainer.innerHTML = '';
+            if (taskToShow) {
+                taskToShow.style.display = 'block';
+                taskContainer.appendChild(taskToShow);
+            } else {
+                 taskContainer.innerHTML = '<p class="text-center text-gray-400 col-span-full">Nenhuma tarefa disponível para o seu nível.</p>';
+            }
+        }
+
+        // --- MODAIS ---
+        const modals = {
+            backdrop: document.getElementById('modal-backdrop'),
+            support: document.getElementById('support-modal'),
+            requirement: document.getElementById('requirement-modal'),
+            taskExplanation: document.getElementById('task-explanation-modal')
+        };
+        const requirementMessage = document.getElementById('requirement-message');
+        
+        function showModal(modal, message = '') {
+            modals.backdrop.classList.remove('hidden');
+            if (message && modal === modals.requirement) {
+                requirementMessage.textContent = message;
+            }
+            modal.classList.remove('hidden');
+        }
+
+        function hideAllModals() {
+            modals.backdrop.classList.add('hidden');
+            for (const key in modals) {
+                if (modals[key] !== modals.backdrop) {
+                    modals[key].classList.add('hidden');
+                }
+            }
+        }
+        
+        // --- EVENT LISTENERS ---
+        function setupEventListeners() {
+            // Botões principais
+            document.getElementById('deposit-btn').addEventListener('click', () => showModal(modals.support));
+            document.getElementById('withdraw-btn').addEventListener('click', () => showModal(modals.support));
+
+            // Notificações
+            const notificationBtn = document.getElementById('notification-btn');
+            const notificationPanel = document.getElementById('notification-panel');
+            notificationBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                notificationPanel.classList.toggle('hidden');
+            });
+            document.getElementById('close-notification-panel').addEventListener('click', () => notificationPanel.classList.add('hidden'));
+            document.addEventListener('click', (e) => {
+                if (!notificationBtn.contains(e.target) && !notificationPanel.contains(e.target)) {
+                    notificationPanel.classList.add('hidden');
+                }
+            });
+            
+            // Botões de fechar modais
+            document.querySelectorAll('.close-modal-btn').forEach(button => button.addEventListener('click', hideAllModals));
+            modals.backdrop.addEventListener('click', hideAllModals);
+
+            // Botão "Iniciar" da tarefa
+            const visibleTaskButton = document.querySelector('#task-container .start-task-btn');
+            if (visibleTaskButton) {
+                visibleTaskButton.addEventListener('click', (event) => {
+                    const taskCard = event.target.closest('.task-card');
+                    const isLocked = taskCard.dataset.locked === 'true';
+                    const minValue = parseFloat(taskCard.dataset.minValue);
+                    const taskTitle = taskCard.dataset.taskTitle;
+                    const taskDescription = taskCard.dataset.taskDescription;
+
+                    if (isLocked) {
+                        showModal(modals.requirement, "Esta tarefa está bloqueada. Entre em contato com o suporte para mais informações.");
+                        return;
+                    }
+                    
+                    if (minValue && config.userBalance < minValue) {
+                        const message = `Esta tarefa requer um saldo mínimo de R$ ${minValue.toFixed(2).replace('.',',')} para ser iniciada.`;
+                        showModal(modals.requirement, message);
+                        return;
+                    }
+                    
+                    // Preenche e exibe o modal da tarefa
+                    document.getElementById('task-modal-title').textContent = taskTitle;
+                    document.getElementById('task-modal-description').textContent = taskDescription;
+                    showModal(modals.taskExplanation);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
+
