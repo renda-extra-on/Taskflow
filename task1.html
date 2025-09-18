@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BitMiner Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #0a0b0d;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .mining-container {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid #334155;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #1e40af, #3b82f6);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+        
+        .modal {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid #334155;
+        }
+        
+        .bitcoin-glow {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(247, 147, 26, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(247, 147, 26, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(247, 147, 26, 0); }
+        }
+        
+        .grid-animation {
+            background: 
+                linear-gradient(rgba(30, 41, 59, 0.8) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30, 41, 59, 0.8) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
+    <div id="vanta-bg" class="fixed inset-0 -z-10"></div>
+    
+    <div class="w-full max-w-4xl mx-auto">
+        <header class="text-center mb-10" data-aos="fade-down">
+            <h1 class="text-4xl md:text-5xl font-bold mb-2 gradient-text">BitMiner Pro</h1>
+            <p class="text-slate-400">Mineração de Bitcoin em nuvem - Alta eficiência</p>
+        </header>
+        
+        <main class="mining-container rounded-2xl p-6 md:p-8 relative overflow-hidden grid-animation" data-aos="zoom-in">
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-purple-900/10"></div>
+            
+            <div class="relative z-10">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-blue-500/20 p-2 rounded-full">
+                            <i data-feather="cpu" class="text-blue-400 w-6 h-6"></i>
+                        </div>
+                        <h2 class="text-xl font-semibold">Sessão de Mineração</h2>
+                    </div>
+                    <div class="text-sm text-slate-400">
+                        <span id="current-time">00:00:00</span>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col md:flex-row items-center gap-8 mb-8">
+                    <div class="flex-1 w-full">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-medium">Progresso</span>
+                            <span id="progress-percent" class="text-sm font-medium">0%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-3">
+                            <div id="progress-bar" class="progress-bar h-3 rounded-full" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-slate-800/50 p-4 rounded-xl flex items-center justify-center bitcoin-glow">
+                        <i data-feather="activity" class="w-12 h-12 text-yellow-500"></i>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                    <div class="bg-slate-800/50 p-4 rounded-xl">
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-500/20 p-2 rounded-full">
+                                <i data-feather="zap" class="text-green-400 w-5 h-5"></i>
+                            </div>
+                            <span class="text-sm">Potência</span>
+                        </div>
+                        <p class="text-xl font-bold mt-2">120 TH/s</p>
+                    </div>
+                    
+                    <div class="bg-slate-800/50 p-4 rounded-xl">
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-purple-500/20 p-2 rounded-full">
+                                <i data-feather="clock" class="text-purple-400 w-5 h-5"></i>
+                            </div>
+                            <span class="text-sm">Tempo Restante</span>
+                        </div>
+                        <p id="time-remaining" class="text-xl font-bold mt-2">15:00</p>
+                    </div>
+                    
+                    <div class="bg-slate-800/50 p-4 rounded-xl">
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-yellow-500/20 p-2 rounded-full">
+                                <i data-feather="dollar-sign" class="text-yellow-400 w-5 h-5"></i>
+                            </div>
+                            <span class="text-sm">Estimativa</span>
+                        </div>
+                        <p id="estimated-value" class="text-xl font-bold mt-2">Calculando...</p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <div class="text-sm text-slate-400">
+                        <span>Hashrate: <span class="text-blue-400">120 TH/s</span></span>
+                        <span class="mx-2">•</span>
+                        <span>Dificuldade: <span class="text-purple-400">36.76T</span></span>
+                    </div>
+                    
+                    <button id="start-mining-btn" class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-3 px-6 rounded-lg flex items-center space-x-2 transition-all duration-300">
+                        <i data-feather="play" class="w-5 h-5"></i>
+                        <span>Iniciar Mineração</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+        
+        <div class="text-center mt-8 text-sm text-slate-500">
+            <p>BitMiner Pro © 2023 - Todos os direitos reservados</p>
+        </div>
+    </div>
+    
+    <!-- Modal de Conclusão -->
+    <div id="success-modal" class="fixed inset-0 flex items-center justify-center p-4 z-50 hidden">
+        <div class="modal rounded-2xl p-8 max-w-md w-full mx-4" data-aos="zoom-in">
+            <div class="text-center">
+                <div class="bg-green-500/20 p-4 rounded-full inline-flex mb-4">
+                    <i data-feather="check-circle" class="w-10 h-10 text-green-400"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-2">Mineração Concluída!</h3>
+                <p class="text-slate-400 mb-6">Sua sessão de mineração foi finalizada com sucesso.</p>
+                
+                <div class="bg-slate-800/50 p-6 rounded-xl mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-slate-400">Bitcoin Minerado:</span>
+                        <span class="font-bold text-yellow-500">0.00042 BTC</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-400">Valor em Reais:</span>
+                        <span class="font-bold text-green-500">R$ 32,00</span>
+                    </div>
+                </div>
+                
+                <button id="close-modal-btn" class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-3 px-6 rounded-lg w-full transition-all duration-300">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+    <script>
+        // Configuração do background animado
+        VANTA.NET({
+            el: "#vanta-bg",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            color: 0x3b82f6,
+            backgroundColor: 0x0a0b0d,
+            points: 12.00,
+            maxDistance: 25.00,
+            spacing: 18.00
+        });
+        
+        // Inicializações
+        document.addEventListener('DOMContentLoaded', () => {
+            AOS.init({
+                duration: 800,
+                easing: 'ease-out-quart'
+            });
+            feather.replace();
+            
+            // Atualiza o horário atual
+            function updateCurrentTime() {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString();
+                document.getElementById('current-time').textContent = timeString;
+            }
+            setInterval(updateCurrentTime, 1000);
+            updateCurrentTime();
+            
+            // Controle da mineração
+            const startBtn = document.getElementById('start-mining-btn');
+            const progressBar = document.getElementById('progress-bar');
+            const progressPercent = document.getElementById('progress-percent');
+            const timeRemaining = document.getElementById('time-remaining');
+            const estimatedValue = document.getElementById('estimated-value');
+            const successModal = document.getElementById('success-modal');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            
+            let miningInterval;
+            let secondsRemaining = 15 * 60; // 15 minutos em segundos
+            let isMining = false;
+            
+            startBtn.addEventListener('click', () => {
+                if (isMining) return;
+                
+                isMining = true;
+                startBtn.disabled = true;
+                startBtn.innerHTML = '<i data-feather="cpu" class="w-5 h-5"></i><span>Minerando...</span>';
+                feather.replace();
+                
+                // Atualiza o tempo restante
+                const updateTimeDisplay = () => {
+                    const minutes = Math.floor(secondsRemaining / 60);
+                    const seconds = secondsRemaining % 60;
+                    timeRemaining.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                };
+                
+                updateTimeDisplay();
+                
+                // Inicia a mineração
+                let progress = 0;
+                const totalTime = secondsRemaining;
+                
+                miningInterval = setInterval(() => {
+                    secondsRemaining--;
+                    
+                    // Atualiza progresso
+                    progress = ((totalTime - secondsRemaining) / totalTime) * 100;
+                    progressBar.style.width = `${progress}%`;
+                    progressPercent.textContent = `${Math.round(progress)}%`;
+                    
+                    // Atualiza tempo restante
+                    updateTimeDisplay();
+                    
+                    // Atualiza valor estimado (simulação)
+                    if (progress < 30) {
+                        estimatedValue.textContent = "Calculando...";
+                    } else if (progress < 70) {
+                        estimatedValue.textContent = "~R$ 15,00";
+                    } else {
+                        estimatedValue.textContent = "~R$ 32,00";
+                    }
+                    
+                    // Verifica se terminou
+                    if (secondsRemaining <= 0) {
+                        clearInterval(miningInterval);
+                        
+                        // Mostra o modal de conclusão
+                        setTimeout(() => {
+                            successModal.classList.remove('hidden');
+                        }, 1000);
+                    }
+                }, 1000);
+            });
+            
+            // Fechar modal
+            closeModalBtn.addEventListener('click', () => {
+                successModal.classList.add('hidden');
+                
+                // Resetar mineração
+                setTimeout(() => {
+                    isMining = false;
+                    secondsRemaining = 15 * 60;
+                    progressBar.style.width = '0%';
+                    progressPercent.textContent = '0%';
+                    timeRemaining.textContent = '15:00';
+                    estimatedValue.textContent = 'Calculando...';
+                    
+                    startBtn.disabled = false;
+                    startBtn.innerHTML = '<i data-feather="play" class="w-5 h-5"></i><span>Iniciar Mineração</span>';
+                    feather.replace();
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>
