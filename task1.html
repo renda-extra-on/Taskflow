@@ -289,17 +289,16 @@
             closeModalBtn.addEventListener('click', () => {
                 successModal.classList.add('hidden');
                 
-                // Resetar mineração
+                // Manter progresso terminado
                 setTimeout(() => {
                     isMining = false;
-                    secondsRemaining = 15 * 60;
-                    progressBar.style.width = '0%';
-                    progressPercent.textContent = '0%';
-                    timeRemaining.textContent = '15:00';
-                    estimatedValue.textContent = 'Calculando...';
+                    progressBar.style.width = '100%';
+                    progressPercent.textContent = '100%';
+                    timeRemaining.textContent = '00:00';
+                    estimatedValue.textContent = 'R$ 32,00';
                     
                     startBtn.disabled = false;
-                    startBtn.innerHTML = '<i data-feather="play" class="w-5 h-5"></i><span>Iniciar Mineração</span>';
+                    startBtn.innerHTML = '<i data-feather="refresh-cw" class="w-5 h-5"></i><span>Nova Mineração</span>';
                     feather.replace();
                 }, 500);
             });
